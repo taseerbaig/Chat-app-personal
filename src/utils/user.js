@@ -50,7 +50,6 @@ const getUser = (id) => {
     const foundUser = users.find((user) => user.id === id)
 
     if(foundUser){
-        console.log(foundUser)
         return foundUser
     }
 

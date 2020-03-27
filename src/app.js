@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-const hbs = require('hbs')
 const http = require('http')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
@@ -34,7 +33,7 @@ io.on('connection' , (socket) => {
         socket.join(user.room)
 
         socket.emit('message' , generateMessage('Admin ','Welcome'))
-        socket.broadcast.to(options.room).emit('message' , generateMessage(user.username , ' has joined! ' ))
+        socket.broadcast.to(user.room).emit('message' , generateMessage(user.username , ' has joined! ' ))
 
         io.to(user.room).emit('roomData', {
             room : user.room,
@@ -42,9 +41,6 @@ io.on('connection' , (socket) => {
         })
 
         callback()
-    
-        //io.to.emit [ emit everybody in a specific room ], 
-        //socket.broadcast.to.emit
 
     })
 
@@ -64,8 +60,8 @@ io.on('connection' , (socket) => {
 
 
     socket.on('location' , (loc , callback) => {
-        const user = getUser(socket.id)
 
+        const user = getUser(socket.id)
         const lat = loc.lat
         const long = loc.long
         io.to(user.room).emit('locmes' , generateLocation(user.username , 'https://google.com/maps?q=' + lat + ',' + long))
